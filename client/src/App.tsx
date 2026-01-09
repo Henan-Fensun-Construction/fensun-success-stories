@@ -5,8 +5,8 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
-import StoryDetail from "./pages/StoryDetail";
 import Stories from "./pages/Stories";
+import StoryDetail from "./pages/StoryDetail";
 
 function Router() {
   return (
@@ -23,7 +23,7 @@ function Router() {
 function App() {
   return (
     <ErrorBoundary>
-      <ThemeProvider defaultTheme="dark">
+      <ThemeProvider defaultTheme="light">
         <TooltipProvider>
           <Toaster />
           <Router />

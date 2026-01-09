@@ -1,10 +1,10 @@
 /**
  * 文章列表页面
  * 
- * 工业建筑主义设计风格:
- * - 斜切卡片网格布局
+ * 奋隼建筑官网风格:
+ * - 简洁专业的白色背景
  * - 分类筛选功能
- * - 蓝图网格背景
+ * - 搜索功能
  */
 
 import Layout from "@/components/Layout";
@@ -27,25 +27,21 @@ const categoryConfig: Record<string, { name: string; icon: React.ElementType }> 
 };
 
 // 动画变体
-const containerVariants = {
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.5 }
+  }
+};
+
+const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.08,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: -20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.4,
-    },
-  },
+    transition: { staggerChildren: 0.08 }
+  }
 };
 
 export default function Stories() {
@@ -67,28 +63,17 @@ export default function Stories() {
   return (
     <Layout>
       {/* 页面头部 */}
-      <section className="relative py-20 overflow-hidden">
-        {/* 背景 */}
-        <div className="absolute inset-0">
-          <img
-            src="/images/blueprint-pattern.jpg"
-            alt="Blueprint"
-            className="w-full h-full object-cover opacity-30"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background" />
-        </div>
-
-        <div className="container relative z-10">
+      <section className="py-16 bg-secondary/30 border-b border-border">
+        <div className="container">
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <span className="data-label text-primary mb-4 block">SUCCESS STORIES</span>
-            <h1 className="text-4xl sm:text-5xl font-heading font-bold mb-4">
+            <h1 className="text-3xl sm:text-4xl font-semibold text-foreground mb-4">
               经验分享
             </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl">
+            <p className="text-muted-foreground max-w-2xl">
               汇集项目管理、技术创新、安全生产等方面的实践经验，
               为行业同仁提供参考和借鉴。
             </p>
@@ -97,7 +82,7 @@ export default function Stories() {
       </section>
 
       {/* 筛选和搜索 */}
-      <section className="py-8 bg-card border-y border-border sticky top-16 z-40">
+      <section className="py-6 bg-background border-b border-border sticky top-20 z-40">
         <div className="container">
           <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
             {/* 分类筛选 */}
@@ -108,11 +93,7 @@ export default function Stories() {
                   variant={activeCategory === key ? "default" : "outline"}
                   size="sm"
                   onClick={() => setActiveCategory(key)}
-                  className={`btn-industrial font-heading tracking-wider ${
-                    activeCategory === key
-                      ? "bg-primary text-primary-foreground"
-                      : "border-border hover:bg-secondary"
-                  }`}
+                  className={activeCategory === key ? "bg-primary text-white" : ""}
                 >
                   <Icon className="w-4 h-4 mr-2" />
                   {name}
@@ -128,7 +109,7 @@ export default function Stories() {
                 placeholder="搜索文章..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-secondary border-border"
+                className="pl-10"
               />
             </div>
           </div>
@@ -137,7 +118,7 @@ export default function Stories() {
 
       {/* 数据来源提示 */}
       {!isUsingGitHub && (
-        <section className="py-4 bg-primary/10 border-b border-primary/20">
+        <section className="py-3 bg-primary/5 border-b border-primary/10">
           <div className="container">
             <div className="flex items-center gap-3 text-sm">
               <AlertCircle className="w-4 h-4 text-primary" />
@@ -150,13 +131,13 @@ export default function Stories() {
       )}
 
       {/* 文章列表 */}
-      <section className="py-12 blueprint-grid min-h-[60vh]">
+      <section className="py-12 min-h-[60vh]">
         <div className="container">
           {loading ? (
             // 加载状态
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div key={i} className="card-industrial p-6 animate-pulse">
+                <div key={i} className="border border-border p-6 animate-pulse">
                   <div className="h-48 bg-secondary mb-4" />
                   <div className="h-6 bg-secondary mb-2 w-3/4" />
                   <div className="h-4 bg-secondary w-1/2" />
@@ -169,7 +150,7 @@ export default function Stories() {
               <div className="w-20 h-20 mx-auto mb-6 bg-secondary rounded-full flex items-center justify-center">
                 <Search className="w-10 h-10 text-muted-foreground" />
               </div>
-              <h3 className="font-heading text-xl font-bold mb-2">未找到相关文章</h3>
+              <h3 className="text-xl font-semibold mb-2 text-foreground">未找到相关文章</h3>
               <p className="text-muted-foreground mb-6">
                 {searchQuery
                   ? `没有找到包含"${searchQuery}"的文章`
@@ -181,7 +162,6 @@ export default function Stories() {
                   setSearchQuery("");
                   setActiveCategory("all");
                 }}
-                className="btn-industrial"
               >
                 查看全部文章
               </Button>
@@ -191,13 +171,13 @@ export default function Stories() {
             <motion.div
               initial="hidden"
               animate="visible"
-              variants={containerVariants}
-              className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+              variants={staggerContainer}
+              className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
             >
               {filteredStories.map((story) => (
-                <motion.div key={story.slug} variants={itemVariants}>
+                <motion.div key={story.slug} variants={fadeInUp}>
                   <Link href={`/stories/${story.slug}`}>
-                    <article className="card-industrial overflow-hidden hover-mechanical group h-full flex flex-col">
+                    <article className="border border-border overflow-hidden card-hover group h-full flex flex-col bg-background">
                       {/* 封面图 */}
                       <div className="relative h-48 overflow-hidden">
                         <img
@@ -205,9 +185,8 @@ export default function Stories() {
                           alt={story.title}
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-card to-transparent" />
                         {story.category && categoryConfig[story.category] && (
-                          <span className="absolute top-4 left-4 px-3 py-1 bg-primary text-primary-foreground text-xs font-mono uppercase tracking-wider">
+                          <span className="absolute top-4 left-4 px-3 py-1 bg-primary text-white text-xs font-medium">
                             {categoryConfig[story.category].name}
                           </span>
                         )}
@@ -215,16 +194,16 @@ export default function Stories() {
 
                       {/* 内容 */}
                       <div className="p-6 flex-1 flex flex-col">
-                        <div className="flex items-center gap-4 mb-3">
-                          <time className="data-label">{story.date}</time>
+                        <div className="flex items-center gap-3 mb-3 text-sm text-muted-foreground">
+                          <time>{story.date}</time>
                           {story.author && (
                             <>
-                              <span className="text-border">|</span>
-                              <span className="data-label">{story.author}</span>
+                              <span>·</span>
+                              <span>{story.author}</span>
                             </>
                           )}
                         </div>
-                        <h3 className="font-heading text-lg font-bold mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                        <h3 className="text-lg font-semibold mb-3 text-foreground group-hover:text-primary transition-colors line-clamp-2">
                           {story.title}
                         </h3>
                         <p className="text-sm text-muted-foreground line-clamp-3 flex-1">
@@ -237,7 +216,7 @@ export default function Stories() {
                             {story.tags.slice(0, 3).map((tag) => (
                               <span
                                 key={tag}
-                                className="px-2 py-1 bg-secondary text-xs text-muted-foreground"
+                                className="px-2 py-1 bg-secondary text-xs text-muted-foreground rounded"
                               >
                                 #{tag}
                               </span>
@@ -255,7 +234,7 @@ export default function Stories() {
           {/* 文章数量统计 */}
           {!loading && filteredStories.length > 0 && (
             <div className="mt-12 text-center">
-              <span className="data-label">
+              <span className="text-sm text-muted-foreground">
                 共 {filteredStories.length} 篇文章
                 {activeCategory !== "all" && ` · ${categoryConfig[activeCategory]?.name || activeCategory}`}
               </span>

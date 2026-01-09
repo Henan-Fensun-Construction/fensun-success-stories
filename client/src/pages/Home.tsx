@@ -1,70 +1,97 @@
 /**
  * 首页组件
  * 
- * 工业建筑主义设计风格:
- * - 震撼的英雄区展示
- * - 斜切卡片布局
- * - 蓝图网格背景
- * - 吊装动画效果
+ * 整合官网内容与经验分享预览:
+ * - 英雄区 (Hero)
+ * - 业务领域 (Services)
+ * - 工程案例 (Projects)
+ * - 公司简介 (About)
+ * - 经验分享预览 (Stories Preview)
+ * - 联系我们 (Contact)
  */
 
 import Layout from "@/components/Layout";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
-import { ArrowRight, Building2, FileText, Users, Shield, Award, TrendingUp } from "lucide-react";
+import { ArrowRight, Building2, Landmark, PaintBucket, FileText, Shield, Award } from "lucide-react";
 import { useStories } from "@/hooks/useStories";
 import { Button } from "@/components/ui/button";
 
 // 动画变体
-const containerVariants = {
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.6 }
+  }
+};
+
+const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
+    transition: { staggerChildren: 0.1 }
+  }
 };
 
-const itemVariants = {
-  hidden: { opacity: 0, y: -30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      type: "spring" as const,
-      damping: 15,
-      stiffness: 100,
-    },
+// 业务领域数据
+const services = [
+  {
+    icon: Building2,
+    title: "房屋建筑工程",
+    description: "承接住宅、商业及公共建筑施工，严格执行国家施工规范与质量标准。"
   },
-};
+  {
+    icon: Landmark,
+    title: "市政工程施工",
+    description: "道路、桥梁、管网等市政基础设施工程，具备系统化施工管理能力。"
+  },
+  {
+    icon: PaintBucket,
+    title: "装饰装修工程",
+    description: "室内外装饰装修施工，注重功能、安全与整体效果统一。"
+  }
+];
+
+// 工程案例数据
+const projects = [
+  {
+    title: "住宅小区建设项目",
+    category: "住宅建筑工程",
+    description: "多栋住宅楼及配套设施施工，按期交付并通过验收。",
+    image: "/images/success-story-bg.jpg"
+  },
+  {
+    title: "商业综合体项目",
+    category: "商业建筑工程",
+    description: "集商业、办公于一体的综合性建筑工程。",
+    image: "/images/hero-construction.jpg"
+  },
+  {
+    title: "城市道路改造工程",
+    category: "市政工程",
+    description: "城市主干道路施工及配套管网工程。",
+    image: "/images/municipal-project.jpg"
+  }
+];
 
 // 统计数据
 const stats = [
-  { label: "工程经验", value: "500+", icon: Building2 },
-  { label: "专业人员", value: "100+", icon: Users },
-  { label: "客户满意度", value: "98%", icon: TrendingUp },
-  { label: "安全记录", value: "零事故", icon: Shield },
+  { value: "500+", label: "工程经验" },
+  { value: "100+", label: "专业人员" },
+  { value: "98%", label: "客户满意度" },
+  { value: "多年", label: "行业经验" }
 ];
 
-// 特色板块
-const features = [
-  {
-    icon: FileText,
-    title: "项目经验",
-    description: "分享各类建筑工程项目的施工管理经验，包括高层住宅、商业综合体、市政工程等。",
-  },
-  {
-    icon: Award,
-    title: "技术分享",
-    description: "探讨建筑施工新技术、新工艺、新材料的应用，推动行业技术进步。",
-  },
-  {
-    icon: Shield,
-    title: "安全管理",
-    description: "总结安全生产管理经验，分享安全事故预防措施和应急处理方案。",
-  },
-];
+// 分类名称映射
+const categoryNames: Record<string, string> = {
+  project: "项目经验",
+  technology: "技术分享",
+  management: "管理心得",
+  safety: "安全管理",
+  quality: "质量控制",
+};
 
 export default function Home() {
   const { stories, loading } = useStories();
@@ -73,16 +100,15 @@ export default function Home() {
   return (
     <Layout>
       {/* 英雄区 */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden">
+      <section id="home" className="relative h-[520px] flex items-center">
         {/* 背景图片 */}
         <div className="absolute inset-0">
           <img
-            src="/images/hero-construction.jpg"
-            alt="Construction site"
+            src="https://cdn.jsdelivr.net/gh/Henan-Fensun-Construction/resource/Company%20Wall.jpg"
+            alt="河南奋隼建筑"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background/60" />
-          <div className="absolute inset-0 blueprint-grid opacity-30" />
+          <div className="absolute inset-0 bg-black/45" />
         </div>
 
         {/* 内容 */}
@@ -90,138 +116,64 @@ export default function Home() {
           <motion.div
             initial="hidden"
             animate="visible"
-            variants={containerVariants}
-            className="max-w-3xl"
+            variants={staggerContainer}
+            className="max-w-2xl text-white"
           >
-            {/* 标签 */}
-            <motion.div variants={itemVariants} className="mb-6">
-              <span className="inline-block px-4 py-1 bg-primary/20 text-primary font-mono text-sm tracking-wider uppercase border border-primary/30">
-                河南奋隼建筑工程有限公司
-              </span>
-            </motion.div>
-
-            {/* 主标题 */}
-            <motion.h1
-              variants={itemVariants}
-              className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold tracking-tight mb-6"
+            <motion.h1 
+              variants={fadeInUp}
+              className="text-4xl sm:text-5xl font-semibold mb-5 leading-tight"
             >
-              成功经验
-              <span className="text-primary block mt-2">分享平台</span>
+              河南奋隼建筑工程有限公司
             </motion.h1>
-
-            {/* 副标题 */}
-            <motion.p
-              variants={itemVariants}
-              className="text-lg sm:text-xl text-muted-foreground mb-8 leading-relaxed"
+            <motion.p 
+              variants={fadeInUp}
+              className="text-lg sm:text-xl text-white/85 mb-8"
             >
-              专注建筑施工与市政工程，以质量与责任筑就每一项工程。
-              <br />
-              在这里，我们分享项目经验、技术心得和管理智慧。
+              专注建筑施工与市政工程 · 以质量与责任筑就每一项工程
             </motion.p>
-
-            {/* 按钮组 */}
-            <motion.div variants={itemVariants} className="flex flex-wrap gap-4">
-              <Link href="/stories">
-                <Button
-                  size="lg"
-                  className="btn-industrial bg-primary hover:bg-primary/90 text-primary-foreground font-heading tracking-wider"
-                >
-                  浏览经验分享
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
-              </Link>
-              <a
-                href="https://direct.fensun.anycast.nyc.mn/"
-                target="_blank"
-                rel="noopener noreferrer"
+            <motion.div variants={fadeInUp}>
+              <a 
+                href="#contact" 
+                className="btn-outline text-white border-white hover:bg-white hover:text-black"
               >
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="btn-industrial font-heading tracking-wider border-primary/50 hover:bg-primary/10"
-                >
-                  了解公司详情
-                </Button>
+                业务咨询
               </a>
             </motion.div>
           </motion.div>
         </div>
-
-        {/* 装饰元素 - 斜切线 */}
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent" />
-        <div 
-          className="absolute bottom-0 left-0 right-0 h-16 bg-background"
-          style={{ clipPath: "polygon(0 100%, 100% 0, 100% 100%)" }}
-        />
       </section>
 
-      {/* 统计数据 */}
-      <section className="py-16 bg-card border-y border-border">
+      {/* 业务领域 */}
+      <section id="services" className="py-20">
         <div className="container">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            variants={containerVariants}
-            className="grid grid-cols-2 md:grid-cols-4 gap-8"
+            variants={staggerContainer}
           >
-            {stats.map((stat, index) => {
-              const Icon = stat.icon;
-              return (
-                <motion.div
-                  key={stat.label}
-                  variants={itemVariants}
-                  className="text-center"
-                >
-                  <div className="inline-flex items-center justify-center w-12 h-12 mb-4 bg-primary/10 text-primary btn-industrial">
-                    <Icon className="w-6 h-6" />
-                  </div>
-                  <div className="font-heading text-3xl sm:text-4xl font-bold text-primary mb-2">
-                    {stat.value}
-                  </div>
-                  <div className="data-label">{stat.label}</div>
-                </motion.div>
-              );
-            })}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* 特色板块 */}
-      <section className="py-20 blueprint-grid">
-        <div className="container">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={containerVariants}
-          >
-            {/* 标题 */}
-            <motion.div variants={itemVariants} className="text-center mb-12">
-              <span className="data-label text-primary mb-2 block">WHAT WE SHARE</span>
-              <h2 className="text-3xl sm:text-4xl font-heading font-bold">
-                分享内容
-              </h2>
+            <motion.div variants={fadeInUp} className="section-title">
+              <h2>业务领域</h2>
+              <p>覆盖建筑工程全流程的专业施工服务</p>
             </motion.div>
 
-            {/* 特色卡片 */}
-            <div className="grid md:grid-cols-3 gap-6">
-              {features.map((feature, index) => {
-                const Icon = feature.icon;
+            <div className="grid md:grid-cols-3 gap-10">
+              {services.map((service, index) => {
+                const Icon = service.icon;
                 return (
                   <motion.div
-                    key={feature.title}
-                    variants={itemVariants}
-                    className="card-industrial p-8 hover-mechanical"
+                    key={service.title}
+                    variants={fadeInUp}
+                    className="p-10 border border-border text-center card-hover hover:shadow-xl"
                   >
-                    <div className="w-14 h-14 bg-primary/10 text-primary flex items-center justify-center mb-6 btn-industrial">
-                      <Icon className="w-7 h-7" />
+                    <div className="w-16 h-16 mx-auto mb-6 bg-primary/10 rounded-full flex items-center justify-center">
+                      <Icon className="w-8 h-8 text-primary" />
                     </div>
-                    <h3 className="font-heading text-xl font-bold mb-4">
-                      {feature.title}
+                    <h3 className="text-xl font-semibold mb-4 text-foreground">
+                      {service.title}
                     </h3>
                     <p className="text-muted-foreground leading-relaxed">
-                      {feature.description}
+                      {service.description}
                     </p>
                   </motion.div>
                 );
@@ -231,25 +183,124 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 最新文章 */}
-      <section className="py-20 bg-card">
+      {/* 工程案例 */}
+      <section id="projects" className="py-20 bg-secondary/30">
         <div className="container">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            variants={containerVariants}
+            variants={staggerContainer}
           >
-            {/* 标题 */}
-            <motion.div variants={itemVariants} className="flex items-end justify-between mb-12">
-              <div>
-                <span className="data-label text-primary mb-2 block">LATEST STORIES</span>
-                <h2 className="text-3xl sm:text-4xl font-heading font-bold">
-                  最新分享
-                </h2>
+            <motion.div variants={fadeInUp} className="section-title">
+              <h2>工程案例</h2>
+              <p>部分代表性项目展示</p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+              {projects.map((project, index) => (
+                <motion.div
+                  key={project.title}
+                  variants={fadeInUp}
+                  className="bg-background border border-border overflow-hidden card-hover"
+                >
+                  <div className="h-48 overflow-hidden">
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <span className="text-xs text-primary font-medium uppercase tracking-wider">
+                      {project.category}
+                    </span>
+                    <h3 className="text-lg font-semibold mt-2 mb-3 text-foreground">
+                      {project.title}
+                    </h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">
+                      {project.description}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* 公司简介 */}
+      <section id="about" className="py-20">
+        <div className="container">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+          >
+            <motion.div variants={fadeInUp} className="section-title">
+              <h2>公司简介</h2>
+              <p>稳健经营 · 注重质量 · 持续发展</p>
+            </motion.div>
+
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              <motion.div variants={fadeInUp}>
+                <h3 className="text-2xl sm:text-3xl font-semibold mb-6 text-foreground">
+                  专业施工管理团队
+                </h3>
+                <p className="text-muted-foreground mb-4 leading-relaxed">
+                  河南奋隼建筑工程有限公司成立于2020年，专注于建筑工程、市政工程及装饰装修施工。
+                </p>
+                <p className="text-muted-foreground mb-8 leading-relaxed">
+                  公司建立了完善的施工管理与质量控制体系，坚持安全生产与规范施工。
+                </p>
+
+                {/* 统计数据 */}
+                <div className="grid grid-cols-2 gap-5">
+                  {stats.map((stat) => (
+                    <div
+                      key={stat.label}
+                      className="p-5 border border-border text-center"
+                    >
+                      <strong className="block text-3xl font-semibold text-foreground mb-1">
+                        {stat.value}
+                      </strong>
+                      <span className="text-sm text-muted-foreground">
+                        {stat.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+
+              <motion.div variants={fadeInUp}>
+                <img
+                  src="/images/team-work.jpg"
+                  alt="河南奋隼建筑团队"
+                  className="w-full rounded-lg shadow-lg"
+                />
+              </motion.div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* 经验分享预览 */}
+      <section id="stories-preview" className="py-20 bg-secondary/30">
+        <div className="container">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+          >
+            <motion.div variants={fadeInUp} className="flex items-end justify-between mb-16">
+              <div className="section-title text-left mb-0">
+                <h2>经验分享</h2>
+                <p>项目管理、技术创新、安全生产等方面的实践经验</p>
               </div>
               <Link href="/stories">
-                <Button variant="ghost" className="font-heading tracking-wider text-primary hover:text-primary/80">
+                <Button variant="ghost" className="text-primary hover:text-primary/80 hidden sm:flex">
                   查看全部
                   <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
@@ -258,9 +309,9 @@ export default function Home() {
 
             {/* 文章列表 */}
             {loading ? (
-              <div className="grid md:grid-cols-3 gap-6">
+              <div className="grid md:grid-cols-3 gap-8">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="card-industrial p-6 animate-pulse">
+                  <div key={i} className="bg-background border border-border p-6 animate-pulse">
                     <div className="h-48 bg-secondary mb-4" />
                     <div className="h-6 bg-secondary mb-2 w-3/4" />
                     <div className="h-4 bg-secondary w-1/2" />
@@ -268,14 +319,11 @@ export default function Home() {
                 ))}
               </div>
             ) : (
-              <div className="grid md:grid-cols-3 gap-6">
-                {latestStories.map((story, index) => (
-                  <motion.div
-                    key={story.slug}
-                    variants={itemVariants}
-                  >
+              <div className="grid md:grid-cols-3 gap-8">
+                {latestStories.map((story) => (
+                  <motion.div key={story.slug} variants={fadeInUp}>
                     <Link href={`/stories/${story.slug}`}>
-                      <article className="card-industrial overflow-hidden hover-mechanical group">
+                      <article className="bg-background border border-border overflow-hidden card-hover group h-full flex flex-col">
                         {/* 封面图 */}
                         <div className="relative h-48 overflow-hidden">
                           <img
@@ -283,25 +331,28 @@ export default function Home() {
                             alt={story.title}
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-card to-transparent" />
                           {story.category && (
-                            <span className="absolute top-4 left-4 px-3 py-1 bg-primary text-primary-foreground text-xs font-mono uppercase tracking-wider">
-                              {story.category === 'project' && '项目经验'}
-                              {story.category === 'technology' && '技术分享'}
-                              {story.category === 'safety' && '安全管理'}
-                              {story.category === 'quality' && '质量控制'}
-                              {story.category === 'management' && '管理心得'}
+                            <span className="absolute top-4 left-4 px-3 py-1 bg-primary text-white text-xs font-medium">
+                              {categoryNames[story.category] || story.category}
                             </span>
                           )}
                         </div>
 
                         {/* 内容 */}
-                        <div className="p-6">
-                          <time className="data-label block mb-2">{story.date}</time>
-                          <h3 className="font-heading text-lg font-bold mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                        <div className="p-6 flex-1 flex flex-col">
+                          <div className="flex items-center gap-3 mb-3 text-sm text-muted-foreground">
+                            <time>{story.date}</time>
+                            {story.author && (
+                              <>
+                                <span>·</span>
+                                <span>{story.author}</span>
+                              </>
+                            )}
+                          </div>
+                          <h3 className="text-lg font-semibold mb-3 text-foreground group-hover:text-primary transition-colors line-clamp-2">
                             {story.title}
                           </h3>
-                          <p className="text-sm text-muted-foreground line-clamp-2">
+                          <p className="text-sm text-muted-foreground line-clamp-2 flex-1">
                             {story.excerpt}
                           </p>
                         </div>
@@ -311,56 +362,61 @@ export default function Home() {
                 ))}
               </div>
             )}
+
+            {/* 移动端查看全部按钮 */}
+            <motion.div variants={fadeInUp} className="mt-8 text-center sm:hidden">
+              <Link href="/stories">
+                <Button variant="outline" className="w-full">
+                  查看全部经验分享
+                  <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </Link>
+            </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* CTA 区域 */}
-      <section className="py-20 relative overflow-hidden">
-        {/* 背景 */}
-        <div className="absolute inset-0">
-          <img
-            src="/images/team-work.jpg"
-            alt="Team"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-background/90" />
-          <div className="absolute inset-0 blueprint-grid opacity-20" />
-        </div>
-
-        <div className="container relative z-10">
+      {/* 联系我们 */}
+      <section id="contact" className="py-20">
+        <div className="container">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            variants={containerVariants}
-            className="max-w-2xl mx-auto text-center"
+            variants={staggerContainer}
           >
-            <motion.span variants={itemVariants} className="data-label text-primary mb-4 block">
-              JOIN US
-            </motion.span>
-            <motion.h2 variants={itemVariants} className="text-3xl sm:text-4xl font-heading font-bold mb-6">
-              分享您的经验
-            </motion.h2>
-            <motion.p variants={itemVariants} className="text-muted-foreground mb-8 leading-relaxed">
-              如果您有宝贵的项目经验或技术心得想要分享，欢迎投稿。
-              我们期待与更多行业同仁交流学习，共同进步。
-            </motion.p>
-            <motion.div variants={itemVariants}>
-              <a
-                href="https://direct.fensun.anycast.nyc.mn/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button
-                  size="lg"
-                  className="btn-industrial bg-primary hover:bg-primary/90 text-primary-foreground font-heading tracking-wider"
-                >
-                  联系我们
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
-              </a>
+            <motion.div variants={fadeInUp} className="section-title">
+              <h2>联系我们</h2>
+              <p>欢迎洽谈合作</p>
             </motion.div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              <motion.div variants={fadeInUp} className="p-6 border border-border">
+                <h4 className="font-semibold mb-2 text-foreground">公司地址</h4>
+                <p className="text-muted-foreground text-sm">
+                  河南省郑州市金水区
+                </p>
+              </motion.div>
+              <motion.div variants={fadeInUp} className="p-6 border border-border">
+                <h4 className="font-semibold mb-2 text-foreground">联系电话</h4>
+                <p className="text-muted-foreground text-sm">
+                  0371-XXXXXXXX<br />
+                  138-XXXX-XXXX
+                </p>
+              </motion.div>
+              <motion.div variants={fadeInUp} className="p-6 border border-border">
+                <h4 className="font-semibold mb-2 text-foreground">电子邮箱</h4>
+                <p className="text-muted-foreground text-sm">
+                  info@fensun-construction.com
+                </p>
+              </motion.div>
+              <motion.div variants={fadeInUp} className="p-6 border border-border">
+                <h4 className="font-semibold mb-2 text-foreground">工作时间</h4>
+                <p className="text-muted-foreground text-sm">
+                  周一至周五 8:00–18:00
+                </p>
+              </motion.div>
+            </div>
           </motion.div>
         </div>
       </section>

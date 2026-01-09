@@ -1,9 +1,9 @@
 /**
  * 文章详情页面
  * 
- * 工业建筑主义设计风格:
- * - 全宽封面图
- * - 工业风格排版
+ * 奋隼建筑官网风格:
+ * - 简洁专业的白色背景
+ * - 清晰的排版层次
  * - Markdown 内容渲染
  */
 
@@ -39,7 +39,7 @@ export default function StoryDetail() {
   // 分享功能
   const handleShare = async () => {
     const url = window.location.href;
-    const title = story?.title || "奋隼建筑 - 成功经验分享";
+    const title = story?.title || "奋隼建筑 - 经验分享";
 
     if (navigator.share) {
       try {
@@ -60,7 +60,7 @@ export default function StoryDetail() {
       <Layout>
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
-            <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
             <p className="text-muted-foreground">加载中...</p>
           </div>
         </div>
@@ -77,12 +77,12 @@ export default function StoryDetail() {
             <div className="w-20 h-20 mx-auto mb-6 bg-destructive/10 rounded-full flex items-center justify-center">
               <AlertCircle className="w-10 h-10 text-destructive" />
             </div>
-            <h1 className="font-heading text-2xl font-bold mb-4">文章未找到</h1>
+            <h1 className="text-2xl font-semibold mb-4 text-foreground">文章未找到</h1>
             <p className="text-muted-foreground mb-8">
               抱歉，您访问的文章不存在或已被删除。
             </p>
             <Link href="/stories">
-              <Button className="btn-industrial bg-primary text-primary-foreground">
+              <Button>
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 返回文章列表
               </Button>
@@ -100,17 +100,17 @@ export default function StoryDetail() {
       {/* 文章头部 */}
       <section className="relative">
         {/* 封面图 */}
-        <div className="relative h-[50vh] min-h-[400px]">
+        <div className="relative h-[400px]">
           <img
             src={story.coverImage || "/images/blueprint-pattern.jpg"}
             alt={story.title}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
         </div>
 
         {/* 文章信息 */}
-        <div className="container relative -mt-32 z-10">
+        <div className="container relative -mt-48 z-10 pb-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -122,7 +122,7 @@ export default function StoryDetail() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="mb-6 text-muted-foreground hover:text-foreground"
+                className="mb-6 text-white/80 hover:text-white hover:bg-white/10"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 返回文章列表
@@ -131,18 +131,18 @@ export default function StoryDetail() {
 
             {/* 分类标签 */}
             {story.category && (
-              <span className="inline-block px-4 py-1 bg-primary text-primary-foreground text-sm font-mono uppercase tracking-wider mb-4">
+              <span className="inline-block px-4 py-1 bg-primary text-white text-sm font-medium mb-4">
                 {categoryNames[story.category] || story.category}
               </span>
             )}
 
             {/* 标题 */}
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold mb-6 leading-tight">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-6 text-white leading-tight">
               {story.title}
             </h1>
 
             {/* 元信息 */}
-            <div className="flex flex-wrap items-center gap-6 text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-6 text-white/80">
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
                 <time>{story.date}</time>
@@ -157,31 +157,7 @@ export default function StoryDetail() {
                 <Clock className="w-4 h-4" />
                 <span>约 {readingTime} 分钟阅读</span>
               </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleShare}
-                className="ml-auto"
-              >
-                <Share2 className="w-4 h-4 mr-2" />
-                分享
-              </Button>
             </div>
-
-            {/* 标签 */}
-            {story.tags && story.tags.length > 0 && (
-              <div className="flex flex-wrap items-center gap-2 mt-6">
-                <Tag className="w-4 h-4 text-muted-foreground" />
-                {story.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-3 py-1 bg-secondary text-sm text-muted-foreground"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
           </motion.div>
         </div>
       </section>
@@ -194,9 +170,25 @@ export default function StoryDetail() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="card-industrial p-8 sm:p-12"
+              className="bg-background border border-border p-8 sm:p-12 rounded-lg"
             >
-              <div className="prose-industrial prose prose-lg max-w-none">
+              {/* 标签 */}
+              {story.tags && story.tags.length > 0 && (
+                <div className="flex flex-wrap items-center gap-2 mb-8 pb-8 border-b border-border">
+                  <Tag className="w-4 h-4 text-muted-foreground" />
+                  {story.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-3 py-1 bg-secondary text-sm text-muted-foreground rounded"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {/* Markdown 内容 */}
+              <div className="prose-fensun">
                 <Streamdown>{story.content}</Streamdown>
               </div>
             </motion.article>
@@ -206,7 +198,7 @@ export default function StoryDetail() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
-              className="mt-12 pt-8 border-t border-border"
+              className="mt-8 pt-8 border-t border-border"
             >
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
@@ -214,38 +206,31 @@ export default function StoryDetail() {
                     感谢阅读本文，如有问题或建议，欢迎联系我们。
                   </p>
                   <a
-                    href="https://direct.fensun.anycast.nyc.mn/"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href="/#contact"
                     className="text-primary hover:underline"
                   >
-                    访问公司官网了解更多 →
+                    联系我们了解更多 →
                   </a>
                 </div>
                 <Button
                   variant="outline"
                   onClick={handleShare}
-                  className="btn-industrial"
                 >
                   <Share2 className="w-4 h-4 mr-2" />
                   分享文章
                 </Button>
               </div>
             </motion.div>
-          </div>
-        </div>
-      </section>
 
-      {/* 返回顶部提示 */}
-      <section className="py-8 bg-card border-t border-border">
-        <div className="container">
-          <div className="flex items-center justify-center gap-4">
-            <Link href="/stories">
-              <Button variant="ghost" className="font-heading tracking-wider">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                返回文章列表
-              </Button>
-            </Link>
+            {/* 返回按钮 */}
+            <div className="mt-8 text-center">
+              <Link href="/stories">
+                <Button variant="ghost">
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  返回文章列表
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
