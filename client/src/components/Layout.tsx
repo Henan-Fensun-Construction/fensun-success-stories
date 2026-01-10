@@ -19,7 +19,7 @@ interface LayoutProps {
 const navLinks = [
   { href: "/", label: "首页", isAnchor: false },
   { href: "/#services", label: "业务领域", isAnchor: true },
-  { href: "/#projects", label: "工程案例", isAnchor: true },
+  { href: "/projects", label: "工程案例", isAnchor: false },
   { href: "/#about", label: "公司简介", isAnchor: true },
   { href: "/stories", label: "经验分享", isAnchor: false },
   { href: "/#contact", label: "联系我们", isAnchor: true },
@@ -90,7 +90,8 @@ export default function Layout({ children }: LayoutProps) {
                 {navLinks.map((link) => {
                   const isActive = 
                     link.href === location || 
-                    (link.href === "/stories" && location.startsWith("/stories"));
+                    (link.href === "/stories" && location.startsWith("/stories")) ||
+                    (link.href === "/projects" && location.startsWith("/projects"));
                   
                   return (
                     <li key={link.href}>
@@ -220,6 +221,11 @@ export default function Layout({ children }: LayoutProps) {
                   </Link>
                 </li>
                 <li>
+                  <Link href="/projects" className="text-background/70 hover:text-background transition-colors">
+                    工程案例
+                  </Link>
+                </li>
+                <li>
                   <Link href="/stories" className="text-background/70 hover:text-background transition-colors">
                     经验分享
                   </Link>
@@ -227,11 +233,6 @@ export default function Layout({ children }: LayoutProps) {
                 <li>
                   <a href="/#about" className="text-background/70 hover:text-background transition-colors">
                     公司简介
-                  </a>
-                </li>
-                <li>
-                  <a href="/#contact" className="text-background/70 hover:text-background transition-colors">
-                    联系我们
                   </a>
                 </li>
               </ul>

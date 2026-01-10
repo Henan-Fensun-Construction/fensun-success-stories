@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
+import Layout from '@/components/Layout';
 import {
   sampleProjects,
   projectCategories,
@@ -74,7 +75,7 @@ export default function Projects() {
   }, [selectedCategory, selectedStatus, searchQuery]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <Layout>
       {/* 页面头部 */}
       <div className="bg-gradient-to-b from-slate-50 to-background py-12 md:py-16 border-b border-border">
         <div className="container">
@@ -243,6 +244,6 @@ export default function Projects() {
           </p>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }
