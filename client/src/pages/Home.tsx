@@ -225,6 +225,15 @@ export default function Home() {
                 </motion.div>
               ))}
             </div>
+
+            <motion.div variants={fadeInUp} className="mt-12 text-center">
+              <Link href="/projects">
+                <Button size="lg" className="gap-2">
+                  查看全部工程案例
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
+            </motion.div>
           </motion.div>
         </div>
       </section>

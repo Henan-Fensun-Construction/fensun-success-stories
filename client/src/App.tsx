@@ -7,6 +7,8 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import Stories from "./pages/Stories";
 import StoryDetail from "./pages/StoryDetail";
+import Projects from "./pages/Projects";
+import ProjectDetail from "./pages/ProjectDetail";
 
 function Router() {
   return (
@@ -14,6 +16,8 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/stories" component={Stories} />
       <Route path="/stories/:slug" component={StoryDetail} />
+      <Route path="/projects" component={Projects} />
+      <Route path="/projects/:slug" component={ProjectDetail} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
